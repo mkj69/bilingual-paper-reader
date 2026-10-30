@@ -1,0 +1,4 @@
+interface:
+  display_name: "双语论文精读"
+  short_description: "Read papers with aligned translation and contextual vocabulary"
+  default_prompt: "Use $bilingual-paper-reader to turn this paper into an English-first Chinese bilingual reader with contextual vocabulary notes."

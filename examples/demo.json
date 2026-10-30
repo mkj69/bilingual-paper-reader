@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "title_en": "Reading an Estimate Carefully",
+  "title_zh": "仔细理解一个估计值",
+  "source": {
+    "authors": "Original example by the project contributors",
+    "identifier": "demo",
+    "version": "1.0",
+    "coverage": "原创教学示例，非真实论文或实验报告。包含段落、公式、图、表和译者注。"
+  },
+  "annotation_limit": 8,
+  "glossary": [
+    {"id":"estimate", "term":"estimate", "forms":["estimates"], "meaning":"估计值", "detail":"这里是名词，表示根据有限样本计算的近似数值。"},
+    {"id":"sample-mean", "term":"sample mean", "forms":[], "meaning":"样本均值", "detail":"把观测值相加，再除以观测值的数量。"},
+    {"id":"sample", "term":"sample", "forms":["samples"], "meaning":"样本", "detail":"这里指用于计算的一组观测数据；与样本均值中的整个词组区分。"},
+    {"id":"uncertainty", "term":"uncertainty", "forms":[], "meaning":"不确定性", "detail":"现有数据不能完全确定目标量时所保留的未知程度。"},
+    {"id":"observation", "term":"observation", "forms":["observations"], "meaning":"观测值", "detail":"这里指记录下来的数值，而非观察这一动作。"},
+    {"id":"independent", "term":"independent", "forms":[], "meaning":"独立的", "detail":"这里讨论统计独立性。独立性本身并不能保证估计没有偏差。"},
+    {"id":"assumption", "term":"assumption", "forms":["assumptions"], "meaning":"假设", "detail":"推理所依赖的前提，需要结合数据产生方式判断。"},
+    {"id":"bias", "term":"bias", "forms":[], "meaning":"偏差", "detail":"此处指统计估计的系统性偏离，不是社会语境中的偏见。"}
+  ],
+  "sections": [
+    {"id":"reading", "title_en":"1. Read the claim", "title_zh":"1. 阅读论断", "blocks":[
+      {"id":"p1", "source_locator":"Original example · paragraph 1", "en":"<p>An estimate describes what we can infer from a finite sample. The sample mean is easy to compute, but its uncertainty depends on how the observations were collected.</p>", "zh":"<p>估计值描述了我们能从有限样本中推断出的结果。样本均值容易计算，但它的不确定性取决于观测值的收集方式。</p>"},
+      {"id":"p2", "en":"<p>For three observations, the sample mean is:</p>", "zh":"<p>对于三个观测值，样本均值为：</p>"},
+      {"id":"eq1", "kind":"equation", "number":"(1)", "mathml":"<math display=\"block\"><mrow><mover><mi>x</mi><mo>¯</mo></mover><mo>=</mo><mfrac><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo><msub><mi>x</mi><mn>2</mn></msub><mo>+</mo><msub><mi>x</mi><mn>3</mn></msub></mrow><mn>3</mn></mfrac></mrow></math>"},
+      {"id":"p3", "en":"<p>Independent observations are a useful assumption in many analyses. This assumption alone does not rule out bias.</p>", "zh":"<p>在许多分析中，观测值相互独立是一项有用的假设。仅凭这一假设并不能排除偏差。</p>"}
+    ]},
+    {"id":"example", "title_en":"2. Check the example", "title_zh":"2. 核对示例", "blocks":[
+      {"id":"fig1", "kind":"figure", "file":"observations.png", "alt":"Three labeled observations with values 2, 4 and 6, and a dashed mean line at 4.", "en":"<p>Figure 1. Three invented observations. The dashed line marks their sample mean.</p>", "zh":"<p>图 1. 三个虚构的观测值。虚线标出了它们的样本均值。</p>"},
+      {"id":"table1", "kind":"table", "headers":[["Observation","观测值编号"],["Value","数值"]], "rows":[["1","2"],["2","4"],["3","6"]], "en":"<p>Table 1. The values used in this illustration. Their sample mean is 4.</p>", "zh":"<p>表 1. 本示例使用的数值。它们的样本均值为 4。</p>"},
+      {"id":"note1", "kind":"note", "glossary_ids":[], "en":"<p>This original example illustrates the reading format. It is not a report of a real experiment.</p>", "zh":"<p>这个原创示例仅用于展示阅读格式，并非真实实验报告。</p>"}
+    ]}
+  ]
+}

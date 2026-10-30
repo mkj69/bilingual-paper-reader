@@ -1,0 +1,57 @@
+// Optional Playwright smoke test for examples/demo.html.
+const {chromium} = require('playwright');
+const {pathToFileURL} = require('node:url');
+const path = require('node:path');
+const assert = require('node:assert/strict');
+(async () => {
+  const browser = await chromium.launch({headless:true, ...(process.env.BROWSER_PATH ? {executablePath:process.env.BROWSER_PATH} : {})});
+  try {
+    const page = await browser.newPage({viewport:{width:1280,height:900}});
+    const errors = [], remoteRequests = [];
+    page.on('pageerror', e => errors.push(e.message));
+    page.on('request', req => {if (/^https?:/.test(req.url())) remoteRequests.push(req.url());});
+    await page.goto(pathToFileURL(path.resolve(process.argv[2] || 'examples/demo.html')).href);
+    assert.equal(await page.locator('img').evaluateAll(imgs=>imgs.every(i=>i.complete && i.naturalWidth>0)), true);
+    assert.equal(await page.locator('math').count(), 1);
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth), true);
+    const word=page.locator('.vocab').first();
+    await word.click();
+    assert.equal(await page.locator('#word-popup').isVisible(), true);
+    assert.match(await page.locator('#word-meaning').innerText(), /估计/);
+    await page.locator('.popup-close').click();
+    assert.equal(await page.locator('#word-popup').isVisible(), false);
+    await word.click(); await page.keyboard.press('Escape');
+    assert.equal(await page.locator('#word-popup').isVisible(), false);
+    await page.locator('#open-glossary').click();
+    await page.locator('#word-search').fill('uncertainty');
+    assert.equal(await page.locator('#word-list li').count(), 1);
+    assert.match(await page.locator('#word-list').innerText(), /不确定性/);
+    await page.locator('#word-search').fill('偏差');
+    assert.ok(await page.locator('#word-list li').count() >= 1);
+    assert.match(await page.locator('#word-list').innerText(), /bias/);
+    await page.keyboard.press('Escape');
+    assert.equal(await page.locator('#glossary-dialog').isVisible(), false);
+    await page.locator('#reading-mode').selectOption('en');
+    assert.equal(await page.locator('.zh-block:visible').count(), 0);
+    await page.locator('#reading-mode').selectOption('zh');
+    assert.equal(await page.locator('.en-block:visible').count(), 0);
+    assert.equal(await page.locator('math').isVisible(), true);
+    assert.equal(await page.locator('table').isVisible(), true);
+    await page.locator('#reading-mode').selectOption('bilingual');
+    await page.locator('#annotations-toggle').uncheck();
+    assert.equal(await page.locator('.vocab').evaluateAll(xs=>xs.every(x=>x.tabIndex===-1)), true);
+    await page.locator('#annotations-toggle').check();
+    if(process.env.SCREENSHOT_PATH) await page.screenshot({path:process.env.SCREENSHOT_PATH,fullPage:false});
+    await page.setViewportSize({width:390,height:844});
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth), true);
+    await word.click();
+    assert.equal(await page.locator('#word-popup').isVisible(), true);
+    await page.keyboard.press('Escape');
+    await page.keyboard.press('Tab');
+    await word.focus();
+    assert.equal(await page.locator('#word-popup').isVisible(), true);
+    assert.deepEqual(errors, []);
+    assert.deepEqual(remoteRequests, []);
+    console.log('PASS: desktop/mobile layout, images, math, popup, Escape, search, modes, annotation toggle, offline loading');
+  } finally {await browser.close();}
+})().catch(error=>{console.error(error);process.exitCode=1;});
